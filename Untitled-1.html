@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="rw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Umuhire Love Mystery 💌</title>
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  background: radial-gradient(circle at top, #ff85a2, #e85aad, #c94dd1);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+h1 {
+  text-shadow: 0 0 20px #ffb6c1;
+}
+
+.container {
+  z-index: 1;
+  width: 90%;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+button {
+  background-color: #ff69b4;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 20px;
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: 0.3s;
+}
+button:hover {
+  background-color: #ff85c1;
+  transform: scale(1.05);
+}
+
+/* Hearts animation */
+@keyframes floatHearts {
+  0% { transform: translateY(0) rotate(0); opacity: 1; }
+  100% { transform: translateY(-800px) rotate(360deg); opacity: 0; }
+}
+.heart {
+  position: absolute;
+  bottom: 0;
+  color: rgba(255,255,255,0.8);
+  animation: floatHearts 8s linear infinite;
+  z-index: 0;
+}
+
+/* Hidden message style */
+#loveMessage {
+  font-size: 1.2em;
+  white-space: pre-wrap;
+  line-height: 1.7;
+  min-height: 180px;
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="quizContainer">
+  <h1>💖 Umuhire Love Mystery 💖</h1>
+  <p>Subiza ibi bibazo bitatu, maze umenye ibanga ry’urukundo rwa Patrick 💌</p>
+
+  <div id="question"></div>
+  <button id="nextBtn">Tangira</button>
+</div>
+
+<div class="container" id="messageContainer" style="display:none;">
+  <h1>Dear Umuhire 💌</h1>
+  <p id="loveMessage"></p>
+</div>
+
+<audio id="bgMusic" loop src="https://cdn.pixabay.com/audio/2022/07/18/audio_c2aef3184c.mp3"></audio>
+
+<script>
+const questions = [
+  { q: "1️⃣ Ni nde Patrick akunda kurusha bose?", a: "Umuhire" },
+  { q: "2️⃣ Umunsi mwahuye bwa mbere ni uwuhe? (andika mu magambo: urugero 'Kuwa mbere')", a: "Kuwa gatatu" },
+  { q: "3️⃣ Patrick avuga ko urukundo rwanyu rumeze nk'iki?", a: "software" }
+];
+
+let current = 0;
+const questionDiv = document.getElementById("question");
+const nextBtn = document.getElementById("nextBtn");
+const quizContainer = document.getElementById("quizContainer");
+const messageContainer = document.getElementById("messageContainer");
+const loveMessage = document.getElementById("loveMessage");
+const music = document.getElementById("bgMusic");
+
+function askQuestion() {
+  if (current < questions.length) {
+    questionDiv.innerHTML = `<p>${questions[current].q}</p><input type="text" id="answer" placeholder="Andika hano..." style="padding:8px;border:none;border-radius:10px;width:80%;text-align:center;">`;
+    nextBtn.textContent = "Emeza";
+  } else {
+    revealMessage();
+  }
+}
+
+nextBtn.addEventListener("click", () => {
+  if (current < questions.length) {
+    const ans = document.getElementById("answer").value.trim().toLowerCase();
+    if (ans === questions[current].a.toLowerCase()) {
+      current++;
+      if (current < questions.length) {
+        askQuestion();
+      } else {
+        revealMessage();
+      }
+    } else {
+      alert("🩵 Oya Umuhire, ongera ugerageze neza 😘");
+    }
+  } else {
+    revealMessage();
+  }
+});
+
+function revealMessage() {
+  quizContainer.style.display = "none";
+  messageContainer.style.display = "block";
+  music.play().catch(()=>{});
+  createHearts();
+  typeText(`
+Umutima wanjye uranyuzwe kuba ndi kumwe nawe, Umuhire 💖
+
+Uburyo useka, uburyo uvuga, ndetse n’uburyo utuma
+isi isa neza kurushaho — byose ni magic y’urukundo rwawe.
+
+Iyo turi kumwe, numva nkoze kuri heaven yanjye 🕊️
+Nifuza kuzandika code y’ubuzima bwanjye turi babiri,
+kuko wowe uri algorithm yawe itagira bug 💻💕
+
+Patrick`);
+}
+
+function typeText(text) {
+  let i = 0;
+  const speed = 70;
+  loveMessage.style.display = "block";
+  const interval = setInterval(() => {
+    loveMessage.textContent += text.charAt(i);
+    i++;
+    if (i >= text.length) clearInterval(interval);
+  }, speed);
+}
+
+function createHearts() {
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.textContent = "💖";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = Math.random() * 20 + 20 + "px";
+    heart.style.animationDuration = Math.random() * 3 + 5 + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 8000);
+  }, 400);
+}
+
+askQuestion();
+</script>
+</body>
+</html>
